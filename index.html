@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Redes integrales e integradas de salud mental de base digital (RIISM)</title>
+<meta name="description" content="Artículo de reflexión publicado en la Revista Latinoamericana de Psiquiatría. Una arquitectura de cuatro niveles para organizar la salud mental en Colombia.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f9f9f7;
+    --ink:#14181f;
+    --ink-muted:#565b66;
+    --line:#e3e3df;
+    --accent:#1b3a63;
+    --accent-soft:#eef2f7;
+    --serif:'Source Serif 4', Georgia, 'Times New Roman', serif;
+    --sans:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --maxw:840px;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+
+  body{
+    font-family:var(--sans);
+    color:var(--ink);
+    background:var(--paper);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{color:var(--accent);}
+  a:focus-visible, button:focus-visible, input:focus-visible{
+    outline:2px solid var(--accent);
+    outline-offset:3px;
+  }
+
+  .wrap{
+    max-width:var(--maxw);
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  .wrap-wide{
+    max-width:1040px;
+    margin:0 auto;
+    padding:0 24px;
+  }
+
+  section{padding:64px 0;}
+  section + section{border-top:1px solid var(--line);}
+
+  /* ---------- Masthead ---------- */
+  .masthead{
+    padding:28px 0 26px;
+    border-bottom:1px solid var(--line);
+  }
+  .masthead .wrap{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:8px;
+  }
+  .kicker{
+    font-size:13px;
+    letter-spacing:0.02em;
+    color:var(--ink-muted);
+  }
+  .kicker strong{color:var(--ink); font-weight:600;}
+
+  /* ---------- Title block ---------- */
+  .title-block{padding-top:56px; padding-bottom:44px;}
+  h1{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(28px, 4.6vw, 44px);
+    line-height:1.16;
+    letter-spacing:-0.01em;
+    max-width:20ch;
+  }
+  .subtitle-en{
+    margin-top:18px;
+    font-size:16px;
+    color:var(--ink-muted);
+    font-style:normal;
+    max-width:52ch;
+  }
+  .authors{
+    margin-top:32px;
+    font-size:15px;
+    line-height:1.6;
+  }
+  .affiliations{
+    margin-top:10px;
+    font-size:13px;
+    color:var(--ink-muted);
+    line-height:1.6;
+  }
+  .affiliations ol{
+    list-style:none;
+    counter-reset:aff;
+  }
+  .affiliations li{
+    counter-increment:aff;
+  }
+  .affiliations li::before{
+    content:counter(aff) " ";
+    font-variant-numeric:tabular-nums;
+  }
+
+  /* ---------- Metadata / citation bar ---------- */
+  .meta-bar{
+    border:1px solid var(--line);
+    background:#fff;
+    padding:28px;
+  }
+  .meta-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:28px;
+    margin-bottom:24px;
+  }
+  .meta-item dt{
+    font-size:12px;
+    color:var(--ink-muted);
+    margin-bottom:4px;
+  }
+  .meta-item dd{
+    font-size:14px;
+  }
+  .citation-block{
+    background:var(--accent-soft);
+    padding:18px 20px;
+    font-size:13.5px;
+    line-height:1.7;
+    border-left:3px solid var(--accent);
+    margin-bottom:22px;
+  }
+  .cc-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:12px;
+    color:var(--ink-muted);
+    border:1px solid var(--line);
+    padding:4px 10px;
+  }
+  .btn-primary{
+    display:inline-block;
+    font-family:var(--sans);
+    font-weight:600;
+    font-size:15px;
+    color:#fff;
+    background:var(--accent);
+    border:none;
+    padding:13px 22px;
+    text-decoration:none;
+    cursor:pointer;
+    transition:background 0.15s ease;
+  }
+  .btn-primary:hover{background:#14294a;}
+  .btn-primary:active{transform:translateY(1px);}
+
+  /* ---------- Abstract ---------- */
+  .abstract p{
+    font-size:17px;
+    line-height:1.75;
+    max-width:66ch;
+  }
+  .abstract p + p{margin-top:20px;}
+
+  /* ---------- Five concepts (definition list) ---------- */
+  .concept-list{display:flex; flex-direction:column;}
+  .concept{
+    padding:26px 0;
+    border-top:1px solid var(--line);
+    display:grid;
+    grid-template-columns:220px 1fr;
+    gap:20px;
+  }
+  .concept:first-of-type{border-top:1px solid var(--line);}
+  .concept-name{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:19px;
+    line-height:1.3;
+  }
+  .concept-def{
+    font-size:15.5px;
+    color:var(--ink);
+    max-width:58ch;
+  }
+  @media (max-width:640px){
+    .concept{grid-template-columns:1fr; gap:8px;}
+  }
+
+  .secondary-trigger{
+    margin-top:36px;
+    padding-top:26px;
+    border-top:1px solid var(--line);
+    font-size:15px;
+  }
+  .secondary-trigger a{
+    font-weight:600;
+    text-decoration:underline;
+    text-underline-offset:3px;
+  }
+
+  /* ---------- Architecture diagram ---------- */
+  .diagram-intro{max-width:66ch; margin-bottom:40px; font-size:15.5px; color:var(--ink-muted);}
+  .diagram{
+    position:relative;
+    max-width:720px;
+    margin:0 auto;
+  }
+  .diagram-levels{
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+    position:relative;
+    z-index:2;
+  }
+  .level{
+    background:#fff;
+    border:1px solid var(--line);
+    padding:16px 20px;
+    margin:0 auto;
+    width:100%;
+  }
+  .level-3{max-width:58%;}
+  .level-2{max-width:70%;}
+  .level-1{max-width:84%;}
+  .level-0{max-width:100%;}
+  .level-base{
+    max-width:100%;
+    background:var(--accent);
+    color:#fff;
+    border-color:var(--accent);
+  }
+  .level-base .level-title{color:#fff;}
+  .level-base .level-desc{color:#dfe6ef;}
+  .level-title{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:15.5px;
+    margin-bottom:4px;
+  }
+  .level-desc{
+    font-size:13.5px;
+    color:var(--ink-muted);
+    line-height:1.5;
+  }
+  .diagram-svg{
+    position:absolute;
+    inset:0;
+    z-index:1;
+    pointer-events:none;
+    overflow:visible;
+  }
+  .diagram-legend{
+    display:flex;
+    gap:24px;
+    flex-wrap:wrap;
+    margin-top:22px;
+    font-size:12.5px;
+    color:var(--ink-muted);
+  }
+  .diagram-legend span{display:inline-flex; align-items:center; gap:6px;}
+  .legend-swatch{width:18px; height:0; border-top:2px dashed var(--accent); display:inline-block;}
+  .legend-swatch.solid{border-top-style:solid;}
+  .diagram-footnote{
+    margin-top:24px;
+    font-size:13px;
+    color:var(--ink-muted);
+    max-width:60ch;
+  }
+
+  /* ---------- Research pipeline ---------- */
+  .pipeline{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:36px;
+  }
+  @media (max-width:760px){
+    .pipeline{grid-template-columns:1fr; gap:32px;}
+  }
+  .pipeline-group{border-top:2px solid var(--accent); padding-top:14px;}
+  .pipeline-status{
+    font-size:13px;
+    font-weight:600;
+    color:var(--accent);
+    margin-bottom:14px;
+  }
+  .pipeline-item{
+    font-size:14.5px;
+    line-height:1.55;
+    margin-bottom:16px;
+  }
+  .pipeline-item .pi-title{font-weight:500;}
+  .pipeline-item .pi-source{
+    display:block;
+    font-size:13px;
+    color:var(--ink-muted);
+    margin-top:3px;
+    font-style:italic;
+  }
+
+  /* ---------- Registro ---------- */
+  .registro-inner{max-width:520px;}
+  .registro-q{font-size:19px; font-family:var(--serif); font-weight:600; margin-bottom:18px;}
+  form.registro-form{display:flex; gap:10px; flex-wrap:wrap;}
+  .field-email{
+    flex:1 1 240px;
+    font-family:var(--sans);
+    font-size:15px;
+    padding:12px 14px;
+    border:1px solid var(--line);
+    background:#fff;
+    color:var(--ink);
+  }
+  .field-email::placeholder{color:#9a9ea6;}
+  .registro-consent{
+    margin-top:14px;
+    font-size:12.5px;
+    color:var(--ink-muted);
+    max-width:52ch;
+  }
+  .registro-bridge{
+    display:none;
+    margin-top:28px;
+    padding-top:24px;
+    border-top:1px solid var(--line);
+  }
+  .registro-bridge.show{display:block;}
+  .registro-bridge p{font-size:15px; margin-bottom:16px;}
+  .bridge-links{display:flex; flex-direction:column; gap:8px;}
+  .bridge-links a{font-size:14.5px; font-weight:600;}
+
+  /* ---------- Seguir explorando ---------- */
+  .explore-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:0;
+  }
+  @media (max-width:720px){
+    .explore-grid{grid-template-columns:1fr; gap:40px;}
+  }
+  .explore-col{padding:4px 40px;}
+  .explore-col:first-child{padding-left:0; border-right:1px solid var(--line);}
+  .explore-col:last-child{padding-right:0;}
+  @media (max-width:720px){
+    .explore-col:first-child{border-right:none; border-bottom:1px solid var(--line); padding-bottom:32px; padding-left:0;}
+    .explore-col:last-child{padding-left:0;}
+  }
+  .explore-q{font-size:16.5px; margin-bottom:18px; max-width:34ch;}
+  .explore-cta{
+    display:inline-block;
+    font-weight:600;
+    font-size:15px;
+    text-decoration:none;
+    border-bottom:2px solid var(--accent);
+    padding-bottom:2px;
+  }
+  .explore-sub{
+    margin-top:14px;
+    font-size:13.5px;
+  }
+  .explore-sub a{color:var(--ink-muted);}
+
+  /* ---------- Footer ---------- */
+  footer{padding:40px 0 56px;}
+  footer p{font-size:13px; color:var(--ink-muted); line-height:1.7;}
+
+  h2{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(22px, 3vw, 28px);
+    margin-bottom:28px;
+    max-width:24ch;
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <span class="kicker"><strong>Artículo de reflexión</strong></span>
+    <span class="kicker">Revista Latinoamericana de Psiquiatría, 2026</span>
+  </div>
+</header>
+
+<section class="title-block">
+  <div class="wrap">
+    <h1>Redes integrales e integradas de salud mental de base digital</h1>
+    <p class="subtitle-en">Digitally enabled integrated mental health networks: a policy proposal for the Colombian health system.</p>
+
+    <div class="authors">
+      Rodrigo Nel Córdoba Rojas<sup>1</sup>, Luis H. Rojas<sup>2</sup>, Angela J. Pereira Morales<sup>2</sup>, Sebastián Gómez<sup>2</sup>, Martha Patricia Saavedra G.<sup>1,3</sup>
+    </div>
+    <div class="affiliations">
+      <ol>
+        <li>Facultad de Medicina, Escuela de Ciencias de la Salud, Universidad del Rosario, Bogotá, Colombia</li>
+        <li>Science for Life, S4L SAS, Grupo de Investigación 10x, Bogotá, Colombia</li>
+        <li>Centro Rosarista de Salud Mental, CeRSaMe, Bogotá, Colombia</li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="meta-bar">
+      <div class="citation-block">
+        Córdoba Rojas, R. N., Rojas, L. H., Pereira Morales, A. J., Gómez, S., y Saavedra G., M. P. (2026). Redes integrales e integradas de salud mental de base digital: una propuesta de política para el sistema de salud colombiano. <em>Revista Latinoamericana de Psiquiatría</em>, 25(2), 27 a 35.
+      </div>
+
+      <dl class="meta-row">
+        <div class="meta-item">
+          <dt>DOI</dt>
+          <dd><a href="https://doi.org/10.64979/revista.v25n2.06">10.64979/revista.v25n2.06</a></dd>
+        </div>
+        <div class="meta-item">
+          <dt>Artículo en línea</dt>
+          <dd><a href="https://revistalatampsiquiatria.com/articulo/redes-integrales-e-integradas-de-salud-mental-de-base-digital-una-propuesta-de-politica-para-el-sistema-de-salud-colombiano">revistalatampsiquiatria.com</a></dd>
+        </div>
+        <div class="meta-item">
+          <dt>Palabras clave</dt>
+          <dd>Salud mental, atención primaria, política de salud, salud digital, inteligencia artificial</dd>
+        </div>
+        <div class="meta-item">
+          <dt>Licencia</dt>
+          <dd><span class="cc-badge">CC BY 4.0</span></dd>
+        </div>
+      </dl>
+
+      <a class="btn-primary" href="https://revistalatampsiquiatria.com/articulo/redes-integrales-e-integradas-de-salud-mental-de-base-digital-una-propuesta-de-politica-para-el-sistema-de-salud-colombiano" target="_blank" rel="noopener">Leer artículo completo</a>
+    </div>
+  </div>
+</section>
+
+<section class="abstract">
+  <div class="wrap">
+    <h2>Resumen</h2>
+    <p>Una proporción sustancial de las personas con trastornos mentales en Colombia no recibe tratamiento oportuno. La brecha de tratamiento supera el 70% y la oferta especializada se concentra en las grandes ciudades. Además, nos encontramos frente a la ausencia de un mecanismo que identifique tempranamente el riesgo, resuelva los casos de menor complejidad en la comunidad y la atención primaria, y priorice la capacidad especializada para quienes más la requieren.</p>
+    <p>Este punto de vista propone las redes integrales e integradas de salud mental de base digital, RIISM. La RIISM se compone de una arquitectura de cuatro niveles funcionales fundamentada en la subsidiariedad clínica y en la evidencia sobre atención escalonada, estratificada y colaborativa, habilitada por un agente digital basado en inteligencia artificial, integrado a la ruta de atención, que administra instrumentos de tamizaje, interactúa conversacionalmente, apoya la clasificación preliminar del riesgo y realiza seguimiento, sin diagnosticar, prescribir ni reemplazar el juicio clínico.</p>
+    <p>La propuesta traduce el marco normativo colombiano reciente en rutas y responsabilidades, hace explícita su teoría de cambio y sus riesgos, y subraya que tanto el modelo como su componente digital requieren validación local mediante un piloto territorial evaluado antes de escalar.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Los cinco conceptos que organizan la RIISM</h2>
+    <div class="concept-list">
+      <div class="concept">
+        <div class="concept-name">Subsidiariedad clínica</div>
+        <div class="concept-def">Cada necesidad se atiende en el nivel menos intensivo capaz de dar una respuesta segura, efectiva y oportuna. No implica retener casos ni sustituir la atención especializada. Exige capacidad resolutiva real, criterios explícitos de escalamiento y reversibilidad para escalar o retornar según la evolución.</div>
+      </div>
+      <div class="concept">
+        <div class="concept-name">Atención escalonada</div>
+        <div class="concept-def">Se inicia con la intervención menos intensiva adecuada y la intensidad aumenta cuando no hay respuesta suficiente o cambia la necesidad.</div>
+      </div>
+      <div class="concept">
+        <div class="concept-name">Atención estratificada</div>
+        <div class="concept-def">El nivel se asigna desde el inicio según severidad o riesgo. El alto riesgo no atraviesa escalones inferiores.</div>
+      </div>
+      <div class="concept">
+        <div class="concept-name">Atención colaborativa</div>
+        <div class="concept-def">La atención primaria, la gestión de caso y la supervisión especializada comparten información, resultados y decisiones.</div>
+      </div>
+      <div class="concept">
+        <div class="concept-name">Atención basada en medición</div>
+        <div class="concept-def">La evolución se monitorea con medidas estandarizadas para decidir continuidad, ajuste o escalamiento.</div>
+      </div>
+    </div>
+
+    <p class="secondary-trigger">¿Te interesa esta línea de investigación? <a href="#registro">Recibe lo próximo.</a></p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap-wide">
+    <h2>La arquitectura de cuatro niveles</h2>
+    <p class="diagram-intro">La entrada al sistema se estratifica por riesgo desde el primer contacto. La mayor parte de la población se resuelve en los niveles de base; solo el alto riesgo se deriva de forma directa al nivel especializado.</p>
+
+    <div class="diagram">
+      <svg class="diagram-svg" viewBox="0 0 720 520" preserveAspectRatio="none" aria-hidden="true">
+        <path d="M 60 480 C -40 340, -40 160, 210 60" fill="none" stroke="#1b3a63" stroke-width="2" stroke-dasharray="6 6"/>
+        <polygon points="205,50 222,63 200,72" fill="#1b3a63"/>
+        <path d="M 660 60 C 760 200, 760 380, 640 480" fill="none" stroke="#9aa3ae" stroke-width="1.6"/>
+        <polygon points="644,489 628,477 651,469" fill="#9aa3ae"/>
+      </svg>
+
+      <div class="diagram-levels">
+        <div class="level level-3">
+          <div class="level-title">Nivel 3, atención especializada</div>
+          <div class="level-desc">Manejo del alto riesgo, atención de la conducta suicida activa (Código Dorado), estabilización y retorno al nivel básico con plan de seguimiento.</div>
+        </div>
+        <div class="level level-2">
+          <div class="level-title">Nivel 2, prestadores según riesgo</div>
+          <div class="level-desc">Intervenciones de mayor intensidad, atención coordinada dentro de la red, referencia y contrarreferencia.</div>
+        </div>
+        <div class="level level-1">
+          <div class="level-title">Nivel 1, atención primaria</div>
+          <div class="level-desc">Confirmación clínica, manejo inicial con la guía mhGAP, seguimiento y medición de resultados, derivación cuando el caso excede la capacidad del nivel.</div>
+        </div>
+        <div class="level level-0">
+          <div class="level-title">Nivel 0, comunidad</div>
+          <div class="level-desc">Promoción y psicoeducación, tamizaje de amplio acceso, contención emocional inicial, clasificación preliminar del riesgo.</div>
+        </div>
+        <div class="level level-base">
+          <div class="level-title">Entrada y estratificación del riesgo</div>
+          <div class="level-desc">Canal digital, agente digital. Canal no digital, agentes comunitarios, línea telefónica, consulta presencial.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="diagram-legend">
+      <span><span class="legend-swatch"></span> Alto riesgo, derivación directa (Código Dorado)</span>
+      <span><span class="legend-swatch solid"></span> Flujo descendente, contrarreferencia con plan de seguimiento</span>
+    </div>
+
+    <p class="diagram-footnote">Gestión de caso y seguimiento longitudinal en todos los niveles. Puerta de entrada no digital equivalente en toda la red.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2>Papers Publicados y trabajos en Curso — Investigación en Salud Mental + Inteligencia Artificial</h2>
+    <div class="pipeline">
+      <div class="pipeline-group">
+        <div class="pipeline-status">Publicado</div>
+        <div class="pipeline-item">
+          <span class="pi-title">Implementación de tecnologías digitales e inteligencia artificial en el marco de mhGAP en Colombia.</span>
+          <span class="pi-source">Journal of Technology in Behavioral Science, 2025.</span>
+        </div>
+      </div>
+      <div class="pipeline-group">
+        <div class="pipeline-status">En revisión por pares</div>
+        <div class="pipeline-item">
+          <span class="pi-title">Una revisión sistemática sobre intervenciones psicológicas basadas en evidencia para su integración en agentes de IA en atención primaria.</span>
+        </div>
+        <div class="pipeline-item">
+          <span class="pi-title">Un estudio de benchmarking sobre modelos de lenguaje para respuesta ante crisis suicida, con análisis de costo y calidad en contextos de bajos recursos.</span>
+        </div>
+      </div>
+      <div class="pipeline-group">
+        <div class="pipeline-status">En desarrollo</div>
+        <div class="pipeline-item">
+          <span class="pi-title">Simulación del efecto de un agente de IA absorbiendo parte de la demanda de una línea de crisis suicida.</span>
+        </div>
+        <div class="pipeline-item">
+          <span class="pi-title">Predicción de deserción en salud mental a partir de patrones de utilización en el sistema de salud colombiano.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="registro">
+  <div class="wrap">
+    <div class="registro-inner">
+      <p class="registro-q">¿Quieres que te avisemos cuando salga lo próximo de esta línea de investigación?</p>
+
+      <!--
+        Brevo: reemplazar action, method y el name del input por los que genera
+        el formulario nativo de Brevo para la lista dedicada (separada de la
+        lista comercial de 1.200 contactos). El bloque .registro-bridge de abajo
+        debe mostrarse desde la página de confirmación o redirección propia de
+        Brevo, no solo con el JS de demostración incluido aquí.
+      -->
+      <a class="btn-primary" href="https://api.index-360.com/media/article/pdf_1/34354/rlp-v25-n2-27-35.pdf?action=open" target="_blank" rel="noopener">Descargar estudio en PDF</a>
+
+      <div class="registro-bridge" id="registroBridge">
+        <p>Gracias. Mientras tanto, dos formas de seguir explorando.</p>
+        <div class="bridge-links">
+          <a href="mailto:rodrigo.cordoba@urosario.edu.co">Escribir al Dr. Rodrigo Nel Córdoba Rojas</a>
+          <a href="https://orgs.mentalth.co/">Conocer la tecnología que habilita esta arquitectura</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap-wide">
+    <h2>Seguir explorando</h2>
+    <div class="explore-grid">
+      <div class="explore-col">
+        <p class="explore-q">¿Tiene preguntas sobre la propuesta o quiere profundizar en la investigación?</p>
+        <a class="explore-cta" href="mailto:rodrigo.cordoba@urosario.edu.co">Escribir al Dr. Rodrigo Nel Córdoba Rojas</a>
+        <p class="explore-sub"><a href="https://orcid.org/0000-0002-9550-7124">Ver perfil de investigación (ORCID)</a></p>
+      </div>
+      <div class="explore-col">
+        <p class="explore-q">¿Quiere conocer la tecnología que hace posible ejecutar esta arquitectura?</p>
+        <!-- Enlace de salida: apunta al sitio de producto una vez esté publicado -->
+        <a class="explore-cta" id="producto" href="https://orgs.mentalth.co/">Conocer la tecnología</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>© 2026 Los autores. Publicado bajo licencia Creative Commons Atribución 4.0 Internacional, CC BY 4.0.<br>
+    Revista Latinoamericana de Psiquiatría, 2026, volumen 25, número 2, páginas 27 a 35.</p>
+    <p style="margin-top:14px;">Un producto de investigación del Grupo Cisne y S4L Science for Life · Grupo de Investigación 10x, Bogotá, Colombia.</p>
+  </div>
+</footer>
+
+
+</body>
+</html>
